@@ -5,9 +5,9 @@ This is my personal fork of `mdbook-quiz`, with the retry feature removed, due t
 > [!WARNING]
 > I am not maintaining this fork. If you want to use `mdbook-quiz`, use the original version.
 
-You need Cargo, [cargo-make](https://github.com/sagiegurari/cargo-make), and [Depot](https://github.com/cognitive-engineering-lab/depot) installed. Then run:
-
 ## Installation
+
+You need Cargo, [cargo-make](https://github.com/sagiegurari/cargo-make), and [Depot](https://github.com/cognitive-engineering-lab/depot) installed. Then:
 
 Clone this repository into `mdbook-quiz`, and then run the following commands:
 
