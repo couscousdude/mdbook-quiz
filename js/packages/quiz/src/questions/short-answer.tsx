@@ -31,7 +31,10 @@ export let ShortAnswerMethods: QuestionMethods<
           />
         ) : (
           /* prompt.response == "long" */
-          <textarea {...formFields} placeholder="Write your answer here..." />
+          <textarea
+            {...formFields}
+            placeholder="Write youuuuuur answer here..."
+          />
         )}
       </>
     );

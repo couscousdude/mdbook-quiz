@@ -1,29 +1,55 @@
 # mdbook-quiz: interactive quizzes for Markdown
 
-[![tests](https://github.com/cognitive-engineering-lab/mdbook-quiz/actions/workflows/main.yml/badge.svg)](https://github.com/cognitive-engineering-lab/mdbook-quiz/actions/workflows/main.yml)
-[![crates.io](https://img.shields.io/crates/v/mdbook-quiz.svg)](https://crates.io/crates/mdbook-quiz)
+This is my personal fork of `mdbook-quiz`, with the retry feature removed, due to a requirement from another project. In general, this version should not be used by anyone else as it is not maintained. Follow the [installation instructions below](#installation) to install (not the one from the original README).
 
-_[live demo](https://cognitive-engineering-lab.github.io/mdbook-quiz/)_
+> [!WARNING]
+> I am not maintaining this fork. If you want to use `mdbook-quiz`, use the original version.
+
+You need Cargo, [cargo-make](https://github.com/sagiegurari/cargo-make), and [Depot](https://github.com/cognitive-engineering-lab/depot) installed. Then run:
+
+## Installation
+
+Clone this repository into `mdbook-quiz`, and then run the following commands:
+
+```bash
+cd mdbook-quiz
+cargo make init-bindings
+cargo install --path crates/mdbook-quiz
+```
+
+> [!WARNING]
+> This will replace the original `mdbook-quiz` installation.
+
+## Original README:
 
 This repository provides an [mdBook](https://github.com/rust-lang/mdBook) [preprocessor](https://rust-lang.github.io/mdBook/format/configuration/preprocessors.html) that allows you to add interactive quizzes to your Markdown books. A quiz looks like this:
 
 <img width="521" alt="Screenshot of mdbook-quiz embedded in a web page" src="https://user-images.githubusercontent.com/663326/178065062-73542533-a1d7-479e-975b-cb0bf03658b2.png">
 
 Table of contents:
- * [Installation](#installation)
-   + [From crates.io](#from-cratesio)
-   + [From source](#from-source)
- * [Usage](#usage)
- * [Quiz schema](#quiz-schema)
-   + [Short answer](#short-answer)
-   + [Multiple choice](#multiple-choice)
-   + [Tracing](#tracing)
- * [Quiz configuration](#quiz-configuration)
 
+- [mdbook-quiz: interactive quizzes for Markdown](#mdbook-quiz-interactive-quizzes-for-markdown)
+  - [Installation](#installation)
+  - [Original README:](#original-readme)
+  - [Original Installation Instructions](#original-installation-instructions)
+    - [From crates.io](#from-cratesio)
+    - [From source](#from-source)
+  - [Usage](#usage)
+  - [Quiz schema](#quiz-schema)
+    - [Short answer](#short-answer)
+      - [Example](#example)
+      - [Interface](#interface)
+    - [Multiple choice](#multiple-choice)
+      - [Example](#example-1)
+      - [Interface](#interface-1)
+    - [Tracing](#tracing)
+      - [Example](#example-2)
+      - [Interface](#interface-2)
+  - [Quiz configuration](#quiz-configuration)
 
-## Installation
+## Original Installation Instructions
 
-*These instructions assume you have an mdBook already set up. Unfamiliar with mdBook? Read the [mdBook guide!](https://rust-lang.github.io/mdBook/)*
+_These instructions assume you have an mdBook already set up. Unfamiliar with mdBook? Read the [mdBook guide!](https://rust-lang.github.io/mdBook/)_
 
 ### From crates.io
 
@@ -62,7 +88,7 @@ prompt.prompt = "What is the keyword for declaring a variable in Rust?"
 answer.answer = "let"
 context = "For example, you can write: `let x = 1`"
 ```
- 
+
 Then in your Markdown file, add a reference to the quiz file:
 
 ```markdown
@@ -74,6 +100,7 @@ And now, a _quiz_:
 ```
 
 Configure your `book.toml` to activate `mdbook-quiz`.
+
 ```toml
 # book.toml
 [preprocessor.quiz]
@@ -89,24 +116,24 @@ A quiz is an array of questions.
 
 ```ts
 export interface Quiz {
-  questions: Question[];
+  questions: Question[]
 }
 ```
 
 A question is one of a set of predefined question types.
 
 ```ts
-export type Question = ShortAnswer | Tracing | MultipleChoice;
+export type Question = ShortAnswer | Tracing | MultipleChoice
 ```
 
 Each question type is an instantiation of this Typescript interface:
 
 ```ts
 export interface QuestionFields<Type extends string, Prompt, Answer> {
-  type: Type;
-  prompt: Prompt;
-  answer: Answer;
-  context?: Markdown;
+  type: Type
+  prompt: Prompt
+  answer: Answer
+  context?: Markdown
 }
 ```
 
@@ -115,9 +142,10 @@ It has a discriminating string name `type` and then a `prompt` and `answer`, alo
 > Note that the `Markdown` type is just a string, but will be interpreted as Markdown by the quiz renderer.
 
 Currently, mdbook-quiz supports these question types:
-* [Short answer](#short-answer)
-* [Multiple choice](#multiple-choice)
-* [Tracing](#tracing)
+
+- [Short answer](#short-answer)
+- [Multiple choice](#multiple-choice)
+- [Tracing](#tracing)
 
 <hr />
 
@@ -140,18 +168,22 @@ context = "For example, you can write: `let x = 1`"
 ```ts
 export interface ShortAnswerPrompt {
   /** The text of the prompt. */
-  prompt: Markdown;
+  prompt: Markdown
 }
 
 export interface ShortAnswerAnswer {
   /** The exact string that answers the question. */
-  answer: string;
+  answer: string
 
   /** Other acceptable strings answers. */
-  alternatives?: string[];
+  alternatives?: string[]
 }
 
-export type ShortAnswer = QuestionFields<"ShortAnswer", ShortAnswerPrompt, ShortAnswerAnswer>;
+export type ShortAnswer = QuestionFields<
+  'ShortAnswer',
+  ShortAnswerPrompt,
+  ShortAnswerAnswer
+>
 ```
 
 <hr />
@@ -182,18 +214,18 @@ Immutable means "not mutable", or not changeable.
 ```ts
 export interface MultipleChoicePrompt {
   /** The text of the prompt. */
-  prompt: Markdown;
+  prompt: Markdown
 
   /** An array of incorrect answers. */
-  distractors: Markdown[];
+  distractors: Markdown[]
 
   /** If defined, don't randomize distractors and put answer at this index. */
-  answerIndex?: number;
+  answerIndex?: number
 }
 
 export interface MultipleChoiceAnswer {
   /** The text of the correct answer. */
-  answer: Markdown;
+  answer: Markdown
 }
 ```
 
@@ -227,25 +259,25 @@ This is a compiler error because line 4 tries to mutate `x` when `x` is not mark
 ```ts
 export interface TracingPrompt {
   /** The contents of the program to trace */
-  program: string;
+  program: string
 }
 
 export interface TracingAnswer {
   /** True if the program should pass the compiler */
-  doesCompile: boolean;
+  doesCompile: boolean
 
   /** If doesCompile=true, then the contents of stdout after running the program */
-  stdout?: string;  
+  stdout?: string
 }
 
-export type Tracing = QuestionFields<"Tracing", TracingPrompt, TracingAnswer>;
+export type Tracing = QuestionFields<'Tracing', TracingPrompt, TracingAnswer>
 ```
 
 ## Quiz configuration
 
 You can configure mdbook-quiz by adding options to the `[preprocessor.quiz]` section of `book.toml`. The options are:
 
-* `fullscreen` (boolean): If true, then a quiz will take up the web page's full screen during use.
-* `cache-answers` (boolean): If true, then the user's answers will be saved in their browser's `localStorage`. Then the quiz will show the user's answers even after they reload the page.
-* `spellcheck` (boolean): If true, then run a spellchecker on all Markdown strings.
-* `more-words` (path): An optional path to a `.dic` file that adds valid words to the spellchecker. You can find a base dictionary for each language in [wooorm/dictionaries](https://github.com/wooorm/dictionaries/tree/main/dictionaries). You can find documentation about how to write a `.dic` file in [this blog post](https://typethinker.blogspot.com/2008/02/fun-with-aspell-word-lists.html).
+- `fullscreen` (boolean): If true, then a quiz will take up the web page's full screen during use.
+- `cache-answers` (boolean): If true, then the user's answers will be saved in their browser's `localStorage`. Then the quiz will show the user's answers even after they reload the page.
+- `spellcheck` (boolean): If true, then run a spellchecker on all Markdown strings.
+- `more-words` (path): An optional path to a `.dic` file that adds valid words to the spellchecker. You can find a base dictionary for each language in [wooorm/dictionaries](https://github.com/wooorm/dictionaries/tree/main/dictionaries). You can find documentation about how to write a `.dic` file in [this blog post](https://typethinker.blogspot.com/2008/02/fun-with-aspell-word-lists.html).

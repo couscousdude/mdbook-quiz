@@ -42,7 +42,6 @@ let initQuizzes = () => {
           quiz={quiz}
           fullscreen={fullscreen}
           cacheAnswers={cacheAnswers}
-          allowRetry
         />
       </ErrorBoundary>
     );

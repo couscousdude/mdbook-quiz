@@ -19,10 +19,10 @@ mdbook_preprocessor_utils::asset_generator!("../js/");
 const FRONTEND_ASSETS: [Asset; 2] = [make_asset!("quiz-embed.iife.js"), make_asset!("style.css")];
 
 #[cfg(feature = "rust-editor")]
-const RA_ASSETS: [Asset; 3] = [
-  make_asset!("ra-worker.js"),
-  make_asset!("editor.worker.js"),
-  make_asset!("wasm_demo_bg.wasm"),
+const RA_ASSETS: [Asset; 0] = [
+  // make_asset!("ra-worker.js"),
+  // make_asset!("editor.worker.js"),
+  // make_asset!("wasm_demo_bg.wasm"),
 ];
 #[cfg(not(feature = "rust-editor"))]
 const RA_ASSETS: [Asset; 0] = [];
